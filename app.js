@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const Log = require('./models/log');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -19,8 +20,14 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/posts', (req, res, next) => {
-	const post = req.body;
-  	console.log(post);
+	// const post = req.body;
+	const logger = new Log({
+		un: req.body.un,
+		status: req.body.status,
+		remark: req.body.remark
+	});
+	logger.save();
+  	console.log(logger);
   	res.status(201).json({
     	message: 'Post added successfully'
   	});
@@ -28,15 +35,20 @@ app.post('/api/posts', (req, res, next) => {
 });
 
 app.get('/api/posts', (req, res, next) => {
-	const logs = [
-		{id: 'dsasdasds', un: 'aaa', status: 'Present', Remark: 'asdasdasdasda'},
-		{id: 'wqeradfdf', un: 'bbb', status: 'Absent', Remark: 'asdasdasdasda'},
-		{id: 'vbvzcxzsd', un: 'ccc', status: 'Present', Remark: 'asdasdasdasda'}
-	];
-	res.status(200).json({
-		message: 'fecthed',
-		logs: logs
-	});
+	// const logs = [
+	// 	{id: 'dsasdasds', un: 'aaa', status: 'Present', Remark: 'asdasdasdasda'},
+	// 	{id: 'wqeradfdf', un: 'bbb', status: 'Absent', Remark: 'asdasdasdasda'},
+	// 	{id: 'vbvzcxzsd', un: 'ccc', status: 'Present', Remark: 'asdasdasdasda'}
+	// ];
+
+	const logs = Log.find()
+		.then(documents => {
+			res.status(200).json({
+				message: 'fecthed',
+				logs: documents
+			});
+		});
+	
 });
 
 module.exports = app;
