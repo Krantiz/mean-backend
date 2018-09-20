@@ -1,6 +1,15 @@
 const http = require("http");
 const app = require("./app");
 const debug = require("debug")("node-angular");
+const mongoose = require('mongoose');
+
+//Connecting to DB
+mongoose.connect("mongodb://localhost:27017/TestDB", { useNewUrlParser: true });
+mongoose.connection.once('open', function() {
+	console.log('MongoDB connected!!');
+}).on('error', function(){
+	console.log('connection error:', error);
+}); 
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
