@@ -6,4 +6,6 @@ const logSchema = mongoose.Schema({
 	remark: { type: String, required: false}
 });
 
-mongoose.model('Log', logSchema);
+const Log = mongoose.model('Log', logSchema);
+
+module.exports = Log;
