@@ -51,4 +51,13 @@ app.get('/api/posts', (req, res, next) => {
 	
 });
 
+app.delete('/api/posts/:postId', (req, res, next) => {
+	const logs = Log.deleteOne({ "_id" : req.params.postId })
+		.then(
+			result => {
+				res.status(200).json({message: 'Deleted!'});
+			}
+		);
+});
+
 module.exports = app;
