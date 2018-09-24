@@ -26,11 +26,14 @@ app.post('/api/posts', (req, res, next) => {
 		status: req.body.status,
 		remark: req.body.remark
 	});
-	logger.save();
-  	console.log(logger);
-  	res.status(201).json({
-    	message: 'Post added successfully'
-  	});
+	logger.save().then(createdPostId => {
+		res.status(201).json({
+	    	message: 'Post added successfully',
+	    	postId: createdPostId._id
+	  	});
+	});
+  	// console.log(logger);
+  	
 
 });
 
