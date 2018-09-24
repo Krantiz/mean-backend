@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   	);
   	res.setHeader(
     	"Access-Control-Allow-Methods",
-    	"GET, POST, PATCH, DELETE, OPTIONS"
+    	"GET, POST, PUT, DELETE, OPTIONS"
   	);
   	next();
 });
@@ -33,8 +33,26 @@ app.post('/api/posts', (req, res, next) => {
 	  	});
 	});
   	// console.log(logger);
-  	
+});
 
+app.put('/api/posts/:id', (req, res, next) => {
+	// console.log('asdasdas');
+	const logger = new Log({
+		_id: req.body.id,
+		un: req.body.un,
+		status: req.body.status,
+		remark: req.body.remark
+	});
+	// console.log(req);
+	// console.log(logger);
+
+	Log.updateOne({ "_id" : req.params.id }, logger)
+		.then(
+			result => {
+				// console.log(result);
+				res.status(200).json({message: 'Updated!'});
+			}
+		);
 });
 
 app.get('/api/posts', (req, res, next) => {
@@ -50,6 +68,18 @@ app.get('/api/posts', (req, res, next) => {
 				message: 'fecthed',
 				logs: documents
 			});
+		});
+	
+});
+
+app.get('/api/posts/:id', (req, res, next) => {
+	Log.findById(req.params.id)
+		.then(document => {
+			if (document) {
+				res.status(200).json(document);
+			} else {
+				res.status(200).json({message: 'Not Found!'});
+			}
 		});
 	
 });
